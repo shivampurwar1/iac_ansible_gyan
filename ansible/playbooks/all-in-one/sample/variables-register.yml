@@ -1,0 +1,15 @@
+---
+  - hosts: test-webservers
+    become: true
+
+    vars: 
+      path_to_app: "/var/www/html"
+
+    tasks:
+      - name: List content from directory
+        command: "ls -lta {{ path_to_app }}"
+        register: html_dir_content
+
+      - name: Show directory content
+        debug:
+          var: html_dir_content
