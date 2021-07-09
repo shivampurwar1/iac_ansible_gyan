@@ -1,0 +1,9 @@
+---
+  - hosts: test-webservers
+    become: true
+    tasks:
+      - name: Folder Copy
+        synchronize: src=../../src/my-app dest=/var/www/html/
+    tasks:
+      - name: Folder Data Sync
+        synchronize: src=../../src/my-app/ dest=/var/www/html/my-app2/
