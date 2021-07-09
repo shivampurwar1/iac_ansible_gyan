@@ -1,0 +1,8 @@
+---
+  - hosts: test-webservers
+    become: true
+    tasks:
+      - name: File Copy with some content generated dynamically
+        copy: 
+          dest: /var/www/html/index.html
+          content: "My WebServer {{ ansible_hostname }}!!"
