@@ -1,0 +1,12 @@
+---
+  - hosts: test-webservers
+    vars_prompt: 
+      - name: "install_apache"
+        prompt: "Do you want to install Apache (type: yes)?"
+
+    tasks:
+      - name: "Install Apache"
+        yum:
+          name: "httpd"
+          state: "present"
+        when: install_apache == "yes"
