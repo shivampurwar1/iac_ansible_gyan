@@ -1,0 +1,9 @@
+---
+  - hosts: test-webservers
+    become: true
+    tasks:
+      - name: Apache status
+        command: service httpd status
+        args:
+            warn: no
+        changed_when: false
