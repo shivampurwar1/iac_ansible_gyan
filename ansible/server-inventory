@@ -1,0 +1,12 @@
+[ansiblecontroller]
+control ansible_connection=local
+
+#[testwebservers]
+#test-web1 ansible_host=10.20.13.235
+
+#[webservers]
+#web1 ansible_host=10.20.0.126
+
+#[appservers]
+#app1 ansible_host=10.20.13.235
+#app2 ansible_host=10.20.13.6
