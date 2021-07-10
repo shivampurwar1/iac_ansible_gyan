@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  vars:
+      key_pair_name: "temp"
+  vars_files: 
+      - "./awskey-vault.yml"
+  tasks:
+    - name: "Delete a EC2 Key pair"
+      ec2_key: 
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       name: "{{ key_pair_name }}"
+       state: absent
