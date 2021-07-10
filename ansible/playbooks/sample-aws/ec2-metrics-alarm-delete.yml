@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  vars:
+      alarm_name: "high-cpu-utilization"
+  vars_files: 
+      - "./awskey-vault.yml"
+  tasks:
+    - name: "Delete alarm based on name"
+      ec2_metric_alarm:
+       description: "My Alarm" 
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       name: "{{ alarm_name }}"
+       state: absent
