@@ -1,0 +1,18 @@
+---
+  - hosts: localhost
+    vars:
+      owner_ids: "011673040121"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "EBS Snapshot info"
+        ec2_snapshot_info: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          owner_ids: "{{ owner_ids }}"
+        register: ec2_snapshot_info
+
+      - name: "Display snapshot info"
+        debug:
+          var: ec2_snapshot_info
