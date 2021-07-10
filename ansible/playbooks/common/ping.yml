@@ -1,0 +1,5 @@
+---
+  - hosts: all
+    tasks:
+    - name: Pinging All Server
+      action: ping

@@ -1,0 +1,12 @@
+---
+  - hosts: test-webservers
+    become: true
+
+    vars: 
+      path_to_app: "/var/www/html"
+      static_content: "My WebServer"
+    tasks:
+      - name: File Copy using Variable
+        copy: 
+          dest: "{{ path_to_app }}/index.html"
+          content: "{{ static_content }}!!"

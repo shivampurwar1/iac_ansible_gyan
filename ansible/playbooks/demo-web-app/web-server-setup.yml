@@ -1,0 +1,15 @@
+--- 
+  - hosts: webservers
+    become: true 
+    tasks:
+      - name: Setting app-lb using Jinja
+        template:
+          src: ../../configs/demo-web-app/app-lb.jinja
+          dest: /etc/httpd/conf.d/app-lb.conf
+          owner: bin
+          group: wheel
+          mode: 0644
+        notify: Reload Apache
+    handlers:
+      - name: Reload Apache
+        service: name=httpd state=reloaded

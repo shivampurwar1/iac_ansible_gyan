@@ -1,0 +1,11 @@
+---
+  - hosts: localhost
+    vars:
+      fname: "fname"
+      lname: "lname"
+    tasks:
+      - name: "Write info in file"
+        lineinfile:
+          create: yes
+          path: "/home/ec2-user/user_info.txt"
+          line: "Generated using ansible. Name {{ fname }} {{ lname }}."

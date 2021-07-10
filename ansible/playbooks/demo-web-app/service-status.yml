@@ -1,0 +1,7 @@
+---
+  - hosts: webservers:appservers
+    become: true
+    tasks:
+      - name: Check Apache Status
+        command: service httpd status
+        changed_when: false

@@ -1,0 +1,10 @@
+---
+  - hosts: test-webservers
+    become: true
+    tasks:
+      - name: File Copy
+        copy: src=../../src/httpd/conf/httpd.conf dest=/etc/httpd/conf/httpd.conf
+        notify: Reload Apache
+    handlers:
+      - name: Reload Apache
+        service: name=httpd state=reloaded

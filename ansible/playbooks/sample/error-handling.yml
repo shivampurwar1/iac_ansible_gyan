@@ -1,0 +1,11 @@
+---
+  - hosts: test-webservers
+    become: true
+    tasks:
+      - name: Apache status
+        command: service httpd status
+        changed_when: false
+
+      - name: This won't fail
+        command: /bin/false
+        ignore_errors: yes

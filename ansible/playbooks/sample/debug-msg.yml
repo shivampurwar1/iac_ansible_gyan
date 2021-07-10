@@ -1,0 +1,8 @@
+---
+  - hosts: control
+    vars: 
+      my_var: "my value in output"
+    tasks:
+      - name: "Show info during command run"
+        debug: 
+          msg: "My message - {{ my_var }}"

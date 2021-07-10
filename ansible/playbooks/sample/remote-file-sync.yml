@@ -1,0 +1,6 @@
+---
+  - hosts: test-webservers
+    become: true
+    tasks:
+      - name: File Copy
+        copy: src=../../src/my-app/index.html dest=/var/www/html/my-app/index.html mode=0644

@@ -1,0 +1,6 @@
+---
+  - import_playbook: ../common/yum-update.yml
+  - import_playbook: ../demo-web-app/service-install.yml
+  - import_playbook: ../demo-web-app/app-server-setup.yml
+  - import_playbook: ../demo-web-app/web-server-setup.yml
+  - import_playbook: ../demo-web-app/service-status.yml
