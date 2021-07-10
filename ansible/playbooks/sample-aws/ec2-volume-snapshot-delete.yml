@@ -1,0 +1,32 @@
+---
+  - hosts: localhost
+    vars:
+      device_name: "/dev/sdf"
+      ec2_id: "i-0d14fb3c0a6f275b6"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "EBS Snapshot - create each time it run"
+        ec2_snapshot: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          device_name: "{{ device_name }}"
+          instance_id: "{{ ec2_id }}"
+          description: "Backup"
+
+[ec2-user@ip-10-20-12-195 playbooks]$ cat sample-aws/ec2-volume-snapshot-delete.yml 
+---
+  - hosts: localhost
+    vars:
+      snapshot_id: "snap-00e5f786b0cf799ca"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "EBS Snapshot - create each time it run"
+        ec2_snapshot: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          snapshot_id: "{{ snapshot_id }}"
+          state: absent
