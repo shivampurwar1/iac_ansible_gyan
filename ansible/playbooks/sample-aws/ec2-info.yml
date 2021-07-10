@@ -1,0 +1,49 @@
+---
+- hosts: localhost
+  vars:
+      ec2_name_tag_value: "TestInstance"
+      ec2_instance_state: "stopped"
+  vars_files: 
+      - "./awskey-vault.yml"
+  tasks:
+# Based on the tags
+    - name: "Finding instance matching with tags"
+      ec2_instance_info: 
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       filters: 
+         tag:Name: "{{ ec2_name_tag_value }}"
+      register: ec2_info
+
+    - name: "Print Instance Id for Debugging"
+      debug:
+        msg: "{{ item.instance_id }}"
+      loop: "{{ ec2_info.instances }}"
+      when: ec2_info.instances != []
+
+    - name: "Print First resource instance Id for Debugging"
+      debug:
+        msg: "{{ ec2_info.instances[0].instance_id }}"
+      when: ec2_info.instances != []
+
+# Based on the instance state
+    - name: "Finding instance matching with instance states"
+      ec2_instance_info:
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       filters:
+         instance-state-name: "{{ ec2_instance_state }}"
+      register: ec2_info_state
+
+    - name: "Print Instance Id for Debugging"
+      debug:
+        msg: "{{ item.instance_id }}"
+      loop: "{{ ec2_info_state.instances }}"
+      when: ec2_info_state.instances != []
+
+    - name: "Print First resource instance Id for Debugging"
+      debug:
+        msg: "{{ ec2_info_state.instances[0].instance_id }}"
+      when: ec2_info_state.instances != []
