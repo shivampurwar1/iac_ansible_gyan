@@ -1,0 +1,16 @@
+---
+  - hosts: localhost
+    vars:
+      bucket_name: "my-unique-test-bucket-342"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Create S3 bucket"
+        aws_s3: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          region: "{{ AWS_REGION }}"
+          bucket: "{{ bucket_name }}"
+          mode: create
+          #ignore_nonexistent_bucket: True
+          #headers: "x-amz-bucket-region=us-east-1"
