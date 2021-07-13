@@ -1,0 +1,19 @@
+---
+  - hosts: localhost
+    vars: 
+      - region: "us-east-1"
+    tasks: 
+      - name: Stop instance based on instance tag (using local action)
+        local_action: ec2
+        args:
+          state: stopped
+          instance_tags: 
+            Name: MyEc2-test
+        tags: stop
+
+      - name: Start instance based on instance tag
+        ec2:
+          state: running
+          instance_tags:
+            Name: MyEc2-test
+        tags: start
