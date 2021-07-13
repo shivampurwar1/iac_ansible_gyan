@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  vars_files:
+    - "./awskey-vault.yml"
+  tasks:
+    - name: cloudformation delete
+      cloudformation:
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        stack_name: "ansible-cloudformation"
+        state: absent
+      register: cfn_info
+
+    - debug:
+        msg: "{{ cfn_info }}"
