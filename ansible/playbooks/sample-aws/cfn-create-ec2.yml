@@ -1,0 +1,20 @@
+- hosts: localhost
+  vars_files:
+    - "./awskey-vault.yml"
+  tasks:
+    - name: create EC2 using the cloudformation stack
+      cloudformation:
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        stack_name: "ansible-cloudformation"
+        state: "present"
+        region: "us-east-1"
+        disable_rollback: true
+        template: "../../src/cfn-templates/ec2-without-role.yml"
+        template_parameters:
+          InstanceInSubnet: "dmz"
+          ParentStackName: "shared-infrastructure"
+          InstanceInAz: "az1"
+          ParameterEC2InstanceType: "t2.micro"
+          ParameterEC2KeyName: "mykey-sandbox"
