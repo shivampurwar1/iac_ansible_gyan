@@ -51,7 +51,7 @@
       - name: "Add Security group info"
         lineinfile:
           path: "{{ report_file }}"
-          line: "Security Group: {{ item.group_name }}  =>  {{ item.description }}"  
+          line: "Security Group: {{ item.group_name }}  =>  {{ item.description }} => {{ item.ip_permissions }}"  
         loop_control:
           label: "{{ item.group_id }}"
         loop: "{{ sg_info.security_groups }}"
