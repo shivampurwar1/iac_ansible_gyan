@@ -1,0 +1,16 @@
+---
+  - hosts: localhost
+    vars:
+      vpc_name: "TestVPC"
+      vpc_cidr_block: "10.50.0.0/16"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Launching EC2 instance"
+        ec2_vpc_net: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          name: "{{ vpc_name }}"
+          cidr_block: "{{ vpc_cidr_block }}"
+          tenancy: default
