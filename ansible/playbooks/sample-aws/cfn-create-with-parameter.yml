@@ -1,4 +1,7 @@
 - hosts: localhost
+  vars:
+    stack_name: "ansible-cloudformation"
+    template_path: "../../src/cfn-templates/ec2-without-role.yml"
   vars_files:
     - "./awskey-vault.yml"
   tasks:
@@ -7,11 +10,10 @@
         aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
         aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
         ec2_region: "{{ AWS_REGION }}"
-        stack_name: "ansible-cloudformation"
+        stack_name: "{{ stack_name }}"
         state: "present"
-        region: "us-east-1"
         disable_rollback: true
-        template: "../../src/cfn-templates/ec2-without-role.yml"
+        template: "{{ template_path }}"
         template_parameters:
           InstanceInSubnet: "dmz"
           ParentStackName: "shared-infrastructure"
