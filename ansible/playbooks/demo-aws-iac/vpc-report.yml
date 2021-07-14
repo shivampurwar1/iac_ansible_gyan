@@ -1,7 +1,7 @@
 ---
   - hosts: localhost
     vars:
-      vpc_id: "vpc-05e16bb216e75e759"
+      vpc_id: "vpc-05e1xxxx"
       report_file: "/home/ec2-user/report.txt"
     vars_files: 
       - "./awskey-vault.yml"
@@ -66,7 +66,7 @@
             vpc-id: "{{ vpc_id }}"
         register: route_info
 
-      - name: "Print Security info"
+      - name: "Add Route table info"
         lineinfile:
           path: "{{ report_file }}"
           line: "Route Id: {{ item.id }}"
