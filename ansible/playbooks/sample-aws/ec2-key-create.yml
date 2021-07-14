@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  vars:
+      key_pair_name: "temp"
+      key_path: "~/.ssh/temp.pem"
+  vars_files: 
+      - "./awskey-vault.yml"
+  tasks:
+    - name: "Create a new EC2 Key pair"
+      ec2_key: 
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       name: "{{ key_pair_name }}"
+      register: key_pair
+
+    - name: "Print key pair for Debugging"
+      debug:
+        var: key_pair
+
+    - name: "Write Private key"
+      lineinfile:
+        create: yes
+        path: "{{ key_path }}"
+        line: "{{ key_pair.key.private_key }}"
+        mode: 0400
+      when: key_pair.key.private_key is defined

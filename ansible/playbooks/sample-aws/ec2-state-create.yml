@@ -1,0 +1,32 @@
+---
+  - hosts: localhost
+    vars:
+      instance_type: "t2.micro"
+      image_id: "ami-0ab4d1e9cf9a1215a" 
+      subnet: "subnet-044c3349592479165"
+      ec2_name_tag_value: "TestInstance"
+      keypair: "mykey-sandbox"
+      sg: "sg-0d5382d33a869324a"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Launching EC2 instance"
+        ec2: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          instance_type: "{{ instance_type }}"
+          image: "{{ image_id }}"
+          assign_public_ip: yes
+          vpc_subnet_id: "{{ subnet }}"
+          group_id: "{{ sg }}"
+          keypair: "{{ keypair }}"
+          wait: true
+          exact_count: 1
+          count_tag: 
+            Name: "{{ ec2_name_tag_value }}"
+          instance_tags:
+            Name: "{{ ec2_name_tag_value }}"
+        register: ec2
+      - debug: 
+          msg: "{{ ec2.tagged_instances[0].public_ip }}"

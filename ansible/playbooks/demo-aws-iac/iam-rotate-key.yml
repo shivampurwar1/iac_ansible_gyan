@@ -1,0 +1,56 @@
+---
+  - hosts: localhost
+    vars:
+      key_path: "/home/ec2-user/newkey.txt"
+      user: "test-user"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Get Keys"
+        iam: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          iam_type: user
+          state: present
+          name: "{{ user }}"
+        register:
+          user_info
+
+      - name: "Disable all the Key"
+        iam:
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          iam_type: user
+          state: update
+          name: "{{ user }}"
+          access_key_ids: "{{ item.access_key_id }}"
+          access_key_state: remove
+        loop: "{{ user_info.user_meta.access_keys }}"
+
+      - name: "Create the new Key"
+        iam:
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          iam_type: user
+          state: update
+          name: "{{ user }}"
+          access_key_state: create
+        register: new_key
+
+     #- debug:
+          #var: new_key
+
+      - name: "Store key info : access_key_id"
+        lineinfile:
+          create: yes
+          path: "{{ key_path }}"
+          mode: 0600
+          line: "{{ new_key.created_keys[0].access_key_id }}"
+
+      - name: "Store key info : secret_key_key"
+        lineinfile:
+          path: "{{ key_path }}"
+          line: "{{ new_key.created_keys[0].secret_access_key }}"

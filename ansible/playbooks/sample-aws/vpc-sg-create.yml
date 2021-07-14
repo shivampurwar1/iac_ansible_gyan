@@ -1,0 +1,26 @@
+---
+  - hosts: localhost
+    vars:
+      sg_name: "TestSG"
+      description: "Testing Security group" 
+      vpc_id: "vpc-04dea4b9d50f5f2f6"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Launching EC2 instance"
+        ec2_group: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          name: "{{ sg_name }}"
+          description: "{{ description }}"
+          vpc_id: "{{ vpc_id }}"
+          rules:
+            - proto: tcp
+              ports: 
+                - 80
+                - 443
+              cidr_ip: 0.0.0.0/0
+            - proto: tcp
+              ports:
+                - 22

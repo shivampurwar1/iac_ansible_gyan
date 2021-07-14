@@ -1,0 +1,43 @@
+---
+- hosts: localhost
+  vars:
+      ec2_id: "i-0d14fb3c0a6f275b6"
+      ami_name: "NewImage"
+  vars_files: 
+      - "./awskey-vault.yml"
+  vars_prompt:
+      - name: "start_instance_after_ami"
+        prompt: "Do you want to start the exisitng instance after amit creation (yes)?"  
+  tasks:
+    - name: "Stopping the instance"
+      ec2: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        state: stopped
+        instance_id: "{{ ec2_id }}"
+        wait: yes
+
+    - name: "Create ami"
+      ec2_ami:
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        name: "{{ ami_name }}"
+        instance_id: "{{ ec2_id }}"
+        state: present
+        wait: yes
+      register: ami_output
+
+    - name: "Display the ami-id"
+      debug:
+        msg: "{{ ami_output.image_id }}"
+
+    - name: "Start EC2 instance based on prompt condition"
+      ec2: 
+        aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        state: running
+        instance_id: "{{ ec2_id }}"
+      when: start_instance_after_ami == "yes"

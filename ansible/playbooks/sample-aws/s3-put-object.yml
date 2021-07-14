@@ -1,0 +1,16 @@
+---
+  - hosts: localhost
+    vars:
+      bucket_name: "my-unique-test-bucket-342"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Put object on bucket"
+        aws_s3: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          bucket: "{{ bucket_name }}"
+          mode: put
+          object: /temp/test.txt
+          src: ~/test.txt

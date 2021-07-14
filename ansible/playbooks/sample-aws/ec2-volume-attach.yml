@@ -1,0 +1,16 @@
+---
+  - hosts: localhost
+    vars:
+      volume_id: "vol-0904d93a79cb4570b"
+      ec2_id: "i-0d14fb3c0a6f275b6"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Attach volume to ec2 instance"
+        ec2_vol: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          id: "{{ volume_id }}"
+          instance: "{{ ec2_id }}"
+          delete_on_termination: yes

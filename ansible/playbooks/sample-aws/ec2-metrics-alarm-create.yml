@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  vars:
+      alarm_name: "high-cpu-utilization"
+      metric_name: "CPUUtilization"
+      namespace: "AWS/EC2"
+      statistic: "Average"
+      comparison: ">="
+      threshold: "90.0"
+      period: "300"
+      evaluation_periods: "3"
+      unit: "Percent"
+      ec2_id: "i-0d14fb3c0a6f275b6"
+  vars_files: 
+      - "./awskey-vault.yml"
+  tasks:
+    - name: "Create a new alarm"
+      ec2_metric_alarm:
+       description: "My Alarm" 
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       name: "{{ alarm_name }}"
+       state: present
+       metric: "{{ metric_name }}"
+       namespace: "{{ namespace }}"
+       statistic: "{{ statistic }}"
+       comparison: "{{ comparison }}"
+       threshold: "{{ threshold }}"
+       period: "{{ period }}"
+       evaluation_periods: "{{ evaluation_periods }}"
+       unit: "{{ unit }}"
+       dimensions: {'InstanceId': '"{{ ec2_id }}"'}

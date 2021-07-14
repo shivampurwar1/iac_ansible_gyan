@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  vars:
+      ami_description: "*cassandra*"
+      ami_owner: "011673040121"
+  vars_files: 
+      - "./awskey-vault.yml"
+  tasks:
+# Based on the tags
+    - name: "Finding instance matching with tags"
+      ec2_ami_info: 
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       filters: 
+         description: "{{ ami_description }}"
+      register: ec2_ami_info
+
+    - name: "Print Description for Debugging"
+      debug:
+        msg: "{{ item.description }}"
+      loop_control:
+        label: "{{ item.image_id }}"
+      loop: "{{ ec2_ami_info.images }}"
+      when: ec2_ami_info.images != []
+
+    - name: "Print First resource description for Debugging"
+      debug:
+        msg: "{{ ec2_ami_info.images[0].description }}"
+      when: ec2_ami_info.images != []
+
+# Based on the instance state
+    - name: "Finding instance matching with instance states"
+      ec2_ami_info:
+       aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+       aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+       ec2_region: "{{ AWS_REGION }}"
+       owners: "{{ ami_owner }}"
+      register: ec2_ami_info_owner
+
+    - name: "Print Description for Debugging"
+      debug:
+        msg: "{{ item.description }}"
+      loop_control:
+        label: "{{ item.image_id }}"
+      loop: "{{ ec2_ami_info_owner.images }}"
+      when: ec2_ami_info_owner.images != []
+
+    - name: "Print First resource description for Debugging"
+      debug:
+        msg: "{{ ec2_ami_info_owner.images[0].description }}"
+      when: ec2_ami_info_owner.images != []

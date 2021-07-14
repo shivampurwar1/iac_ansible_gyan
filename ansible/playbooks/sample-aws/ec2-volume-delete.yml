@@ -1,0 +1,14 @@
+---
+  - hosts: localhost
+    vars:
+      volume_id: "vol-04ce7822ef60f2f10"
+    vars_files: 
+      - "./awskey-vault.yml"
+    tasks:
+      - name: "Delete EBS volume"
+        ec2_vol: 
+          aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+          aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+          ec2_region: "{{ AWS_REGION }}"
+          id: "{{ volume_id }}"
+          state: absent
