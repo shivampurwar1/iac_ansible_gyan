@@ -1,0 +1,17 @@
+---
+# tasks file for roles/demo-web-app-role
+- name: App server info
+  copy: 
+    dest: "{{ path_to_app }}/info.html"
+    content: "{{ ansible_system }} - {{ ansible_hostname }}"
+- name: File Copy
+  copy: src=../files/index.html dest="{{ path_to_app }}/index.html" mode=0644
+  notify: Reload Apache
+
+- name: List content from directory
+  command: "ls -lta {{ path_to_app }}"
+  register: html_dir_content
+
+- name: Show directory content
+  debug:
+    msg: "{{ html_dir_content }}"

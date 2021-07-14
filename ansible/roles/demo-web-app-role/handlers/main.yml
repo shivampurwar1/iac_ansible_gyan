@@ -1,0 +1,4 @@
+---
+# handlers file for roles/demo-web-app-role
+- name: Reload Apache
+  service: name=httpd state=reloaded
